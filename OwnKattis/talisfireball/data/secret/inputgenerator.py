@@ -10,12 +10,14 @@ def generateCoordinates(coordinate):
             next = False
 
 
-for x in range(4,50):
-    f = open(f"file{x+1}.in", "w")
-    people = int(100000)
+for x in range(0,10):
+    f = open(f"WithAllyLow{x+1}.in", "w")
+    """f = open(f"MaxAllies{x+1}.in", "w")"""
+    people = int(100)
     n = random.randint(1,people)
-    m = random.randint(1,people)
-    coordinate = int(100000)
+    """m = random.randint(1,people)"""
+    m = 0
+    coordinate = int(100)
     f.writelines(str(n)+ '\n')
     usedSpaces = set()
     for _ in range(n):
