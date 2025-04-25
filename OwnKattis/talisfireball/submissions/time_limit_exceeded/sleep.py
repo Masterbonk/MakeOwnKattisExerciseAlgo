@@ -2,14 +2,20 @@ import time
 
 
 a = int(input())
+for i in range(a):
+    input()
+
 b = int(input())
+for i in range(b):
+    input()
+
 
 for _ in range(10**10):
     a = a + b - b
 
 if a == b:
-    print("equal")
+    print(21)
 elif a < b:
-    print("smaller")
+    print(21)
 elif a > b:
-    print("bigger")
+    print(21)
