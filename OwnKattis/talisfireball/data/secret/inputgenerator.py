@@ -1,6 +1,5 @@
 import random
 import os
-from ....submissions/accepted
 
 people = int(100000)
 coordinate = int(400)
