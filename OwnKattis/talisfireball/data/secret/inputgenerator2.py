@@ -1,8 +1,8 @@
 import random
 import os
 
-people = int(100)
-coordinate = int(40)
+people = int(100000)
+coordinate = int(400)
 
 allies = set()
 max_amount_hit = 0
@@ -86,8 +86,8 @@ def generateCoordinates(coordinate):
             next = False
 
 
-for x in range(0,1):
-    nameOfFile = f"testing{x+1}" 
+for x in range(0,10):
+    nameOfFile = f"evenSplit{x+1}" 
     f = open(nameOfFile+".in", "w")
     """f = open(f"MaxAllies{x+1}.in", "w")"""
     #n = random.randint(1,people)
