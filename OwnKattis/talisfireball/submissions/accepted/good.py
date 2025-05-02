@@ -33,7 +33,6 @@ def checkWithinRadius(center):
                 counter+=1
     return counter
 
-checkWithinRadius((2,2))
 
 def checkEnemy(enemy):
     global max_amount_hit
