@@ -1,10 +1,8 @@
 import random
-import os
 
-"""people = int(100000)
-coordinate = int(400)"""
-people = int(100)
-coordinate = int(50)
+people = int(100000)
+coordinate = int(450)
+
 
 allies = set()
 max_amount_hit = 0
@@ -88,13 +86,14 @@ def generateCoordinates(coordinate):
             next = False
 
 
-for x in range(0,5):
-    nameOfFile = f"NoAllyLow{x+1}" 
+for x in range(0,2):
+    nameOfFile = f"WithAllyMedium{x+1}" 
     f = open(nameOfFile+".in", "w")
     """f = open(f"MaxAllies{x+1}.in", "w")"""
     n = random.randint(1,people)
-    #m = random.randint(1,people)
-    m = 0
+    m = random.randint(1,people)
+    #n = 50000
+    #m = 0
     #n = int(people/2)
     #m = int(people/2)
     f.writelines(str(n)+ '\n')
