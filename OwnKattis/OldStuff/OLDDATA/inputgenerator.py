@@ -1,9 +1,8 @@
 import random
-import os
-from ....submissions/accepted
 
 people = int(100000)
-coordinate = int(400)
+coordinate = int(1000)
+
 
 def generateCoordinates(coordinate):
     next = True
@@ -17,8 +16,7 @@ def generateCoordinates(coordinate):
 
 
 for x in range(0,1):
-    nameOfFile = f"FilledWithAllies{x+1}" 
-    f = open(nameOfFile+".in", "w")
+    f = open(f"FilledWithAllies2.in", "w")
     """f = open(f"MaxAllies{x+1}.in", "w")"""
     #n = random.randint(1,people)
     #m = random.randint(1,people)
@@ -32,6 +30,7 @@ for x in range(0,1):
     f.writelines(str(m)+ '\n')
     for _ in range(m):
         generateCoordinates(coordinate)
-    
-    answerFile = open(nameOfFile+".ans", "w")
-    os.system("python3 './../../submissions/accepted/opti.py' < "+nameOfFile+".in")
+
+
+
+
