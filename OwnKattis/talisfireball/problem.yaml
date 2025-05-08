@@ -1,2 +1,6 @@
 name: Talis' Fireball
 license: public domain
+limits:
+  time_multiplier: 1.0  # This prevents it from scaling up
+  time_safety_margin: 1.0  # Optional: keeps margin tight
+  time: 4.0  # Your actual limit

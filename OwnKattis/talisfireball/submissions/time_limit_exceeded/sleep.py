@@ -1,21 +1,58 @@
-import time
+#!/usr/bin/python3
+
+n = int(input())
+    
+enemies = set()
+
+for i in range(n):
+    x,y = map(int,input().split())
+    enemies.add((x,y))
+
+m = int(input())
+    
+allies = set()
+
+for i in range(m):
+    x,y = map(int,input().split())
+    allies.add((x,y))
 
 
-a = int(input())
-for i in range(a):
-    input()
+max_amount_hit = 0
+resultOfSquare = set()
 
-b = int(input())
-for i in range(b):
-    input()
+def checkWithinRadius(center):
+    counter = 0
+    center_x,center_y = center
+    corners = {(center_x-2,center_y-2),(center_x+2,center_y-2),(center_x-2,center_y+2),(center_x+2,center_y+2),}
+    for x in range(center_x-2,center_x+3):
+        for y in range(center_y-2,center_y+3):
+            if (x,y) in corners:
+                continue
+            elif (x,y) in allies:
+                return 0
+            elif (x,y) in enemies:
+                counter+=1
+    return counter
 
 
-for _ in range(10**10):
-    a = a + b - b
+def checkEnemy(enemy):
+    global max_amount_hit
+    global resultOfSquare
+    center_x,center_y = enemy
+    corners = {(center_x-2,center_y-2),(center_x+2,center_y-2),(center_x-2,center_y+2),(center_x+2,center_y+2),}
+    for x in range(center_x-2,center_x+3):
+        for y in range(center_y-2,center_y+3):
+            if (x,y) in corners:
+                continue
+            kills = checkWithinRadius((x,y))
+            resultOfSquare.add((x,y))
+            if kills>max_amount_hit:
+                max_amount_hit = kills
+    
+for e in enemies:
+    checkEnemy(e)
+for a in allies:
+    checkEnemy(a)
+print(max_amount_hit)
 
-if a == b:
-    print(21)
-elif a < b:
-    print(21)
-elif a > b:
-    print(21)
+
