@@ -3,8 +3,8 @@ import sys
 import re
 
 def checkGroup():
-    n = sys.stdin.readline() #Reads the line
-    if not re.match(r"(0|([1-9][0-9]*))\n", n): #Checks for actual numbers
+    n = sys.stdin.readline().strip() #Reads the line
+    if not re.match(r"^(0|[1-9][0-9]*)$", n): #Checks for actual numbers
         print("first")
         sys.exit(43) #fail
     else:
@@ -16,7 +16,7 @@ def checkGroup():
 
     for _ in range(n):
         line = sys.stdin.readline()
-        if not re.match(r"(0|([1-9][0-9]*)) (0|([1-9][0-9]*))\n", line): #Checks for actual numbers in the form of x y
+        if not re.match(r"(0|([1-9][0-9]*)) (0|([1-9][0-9]*))", line): #Checks for actual numbers in the form of x y
             print("third")
             sys.exit(43) #fail
         try:
