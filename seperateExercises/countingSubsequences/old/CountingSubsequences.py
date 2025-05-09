@@ -22,6 +22,8 @@ def get_subsets(arr):
                 int_index.append(index)
     return interesting[1:], int_index ##To remove the empty set at the start
 
+
+#Testing to with recursion
 def rec(arr, i, subset, subsets):
     if i == len(subsets):
         subsets.append(subset.copy())
@@ -36,12 +38,6 @@ def alt_get_subsets(arr):
     return subsets
 
 
-def clean_up(origin, arr):
-    counter = 0
-    check = [False*origin]
-    for i in arr:
-        if check[i] == False:
-            check[i] = True
 
 
 ##Make function to clean up and make sure numbers don't repeat
@@ -66,14 +62,3 @@ for i in range(cases):
     inter = alt_get_subsets(interesting)
 
 
-##Sort the list. If there are negative, there can be above 47.
-##Remove numbers from list/stack when used
-##Instead of removing, use accumilators?
-##Sum all of them (p.84), then find how many numbers have %47 == 0
-##Use a segment tree to make the above faster
-
-
-##--IDEAS--
-##Sort the arrar
-##Start from middle
-##if the numbers do not add up, go a step up or down
