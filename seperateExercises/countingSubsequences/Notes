@@ -1,0 +1,14 @@
+Idea:
+- Generate all subsets
+- Save them in a map with their sum as the key
+- Sort out the ones where 47 is not the key
+- Check so there are no repeated ints. That one indes is not use severall times
+
+Explanation:
+sum_arr:
+This function takes an array ans sums all of the elemets together
+
+get_subsets:        source: "Inside Code" on youtube (How to generate subsets of an array - inside code)
+Takes an array and generates all subsets in that array.
+It takes the starting set(s), copies it, and adds the new element to them
+
