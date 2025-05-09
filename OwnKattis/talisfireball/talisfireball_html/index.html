@@ -25,38 +25,61 @@
 <body>
   <div class="problembody">
     <div class="problemheader">
-      <h1>Talis Fireball</h1>
+      <h1>Talis’ Fireball</h1>
       <h3>Problem ID: talisfireball</h3>
     </div>
     <p>The battle had been raging for many rounds and your party is
     tired. Things are looking dark, until the wizard Talis realizes
     he has a 3rd level spell slot left. That’s enough for a
     Fireball! But while Talis is searching his scrolls, an arrow
-    grazes his glases. They fall to the groud and shatter into
-    pieces. Now you all need to work together to fuínd out how many
-    people Talis can hit.</p>
-    <p>Your team will shout the amount of enemies and their
+    grazes his glasses. They fall to the ground and shatter into
+    pieces. Now you all need to work together to find out how many
+    people Talis can hit.<br>
+    <br>
+    Your team will shout the amount of enemies and their
     coordinates to you. Then they will also shout their location,
     just so Talis doesn’t hit them. Now it is up to you to find out
     how many enemies Talis can hit with one fireball. Once you tell
     him the max amount of enemies he can hit, Talis will use his
     wizard energy to feel where the fireball should hit on the
-    battlefield.</p>
-    <p>In short, you need to calculate the maximum aount of enemies
-    Tails can hit with one Fireball.</p>
+    battlefield.<br>
+    <br>
+    In short, you need to calculate the maximum number of enemies
+    Tails can hit with one Fireball.<br>
+    <br>
+    Talis having no situational awareness states multiple rules for
+    where he is willing to place the fireball and how big he can
+    make it. While the rest of your party holds the enemies at
+    bay.<br>
+    <br>
+    All enemies, allies and the fireball itself will be placed on a
+    grid, like shown in the picture. An enemy is considered hit by
+    a fireball if the middle of the square is within the
+    <span class="tex2jax_process">$2.5 m$</span> radius circle the
+    fireball creates. The fireball cannot hit any ally, or Talis
+    will refuse to throw it. Additionally, Talis can only throw the
+    fireball so far, so we shall only consider an area of
+    <span class="tex2jax_process">$450 m * 450 m$</span>.</p>
+    <center>
+      <img src="img-0001.png" alt=
+      "\includegraphics[width=0.5\textwidth ]{Example.png}" style=
+      "width:50.00%">
+    </center>
     <h2>Input</h2>
     <p>The input consist of 4 lines. First line containing how many
-    enemies there are on the battlefield 0 ≤e ≤100000 Second line
-    contains e integers of coordinates of the enemies, seperated by
-    spaces. Third line contains how many party-members are on the
-    battlefield 0 ≤f ≤100000 Last line contains f integers of
-    coordinates of your friends, seperated by spaces.</p>
+    enemies there are on the battlefield <span class=
+    "tex2jax_process">$0 \leq e \leq 100000$</span><br>
+    Second line contains e integers of coordinates of the enemies,
+    seperated by spaces.<br>
+    Third line contains how many party-members are on the
+    battlefield <span class="tex2jax_process">$0 \leq f \leq
+    100000$</span><br>
+    Last line contains f integers of coordinates of your friends,
+    seperated by spaces.</p>
     <h2>Output</h2>
-    <p>The output should be one string, that follows this format.
-    i1 &gt; i2 outputs: <span class=
-    "tex2jax_process">$"bigger"$</span> i1 &lt; i2 outputs:
-    <span class="tex2jax_process">$"smaller"$</span> i1 = i2
-    outputs: <span class="tex2jax_process">$"equal"$</span></p>
+    <p>Output a single integer giving the maximum number of enemies
+    a single fireball can hit at once, without hitting any
+    friends.</p>
     <table class="sample" summary="sample data">
       <tr>
         <th>Sample Input 1</th>
