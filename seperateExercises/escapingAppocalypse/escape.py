@@ -2,54 +2,76 @@ from collections import defaultdict
 import sys
 sys.setrecursionlimit(10**6)
 
+'''
+How to make it faster:
+'''
+
 amountOfTestcases = int(input())
 
-def dfs(graph,u,dest,mincap,seen): # returns path to dest
-    if u in seen:
+'''def dfs(graph,node,dest,mincap,seen,time,usedTime): # returns path to dest
+    if node in seen:
         return (False,seen)
-    seen.add(u)
-    for v,cap in graph[u].items():
-        if cap > mincap: # only consider edges with capacity > mincap
-            if v == dest:
-                return (True,[(u,v)])
-            #print(f'explore {u} {v}, {cap}')
-            suc, p = dfs(graph,v,dest,mincap,seen)
+    seen.add(node)
+
+    for internalNode,cap in graph[node].items():
+        internalnode_time = int(internalNode.imag)
+        
+
+        if cap[0] > mincap and usedTime <= internalnode_time and time >= usedTime:  # only consider edges with capacity > mincap
+            if internalNode == dest:
+                return (True,[(node,internalNode)])
+            suc, p = dfs(graph,internalNode,dest,mincap,seen,time,usedTime+cap[1])
             if suc:
-                p.append((u,v))
+                p.append((node,internalNode))
                 return (True,p)
     return (False,seen)
+'''
+def bfs(graph,src,dest,time,usedTime,mincap=0): # returns path to dest or reachable set
+    parent = {src:src}
+    layer = [src]
+    while layer:
+        nextlayer = []
+        for UpperNode in layer:
+            for internalNode,cap in graph[UpperNode].items():
+                internalnode_time = int(internalNode.imag)
+
+                if cap[0] > mincap and internalNode not in parent and usedTime <= internalnode_time and time >= usedTime:
+                    parent[internalNode] = UpperNode
+                    nextlayer.append(internalNode)
+                    if internalNode == dest:
+                        p =  []
+                        current_vertex = dest
+                        while src != current_vertex:
+                            p.append((parent[current_vertex],current_vertex))
+                            current_vertex = parent[current_vertex]
+                        return (True,p)
+        layer = nextlayer
+    return (False,set(parent))
    
 
-def flow(orggraph, src,dest):
-    graph = defaultdict(lambda: defaultdict(int))
-    maxcapacity = 0
-    for u,d in orggraph.items():
-        for v,c in d.items():
-            graph[u][v] = c
-            maxcapacity = max(maxcapacity,c)
-
+def flow(graph, src, dest, totalTime, maxcapacity):
     current_flow = 0
     mincap = maxcapacity # set to 0 to disable capacity scaling
-    while True:
-        #ispath, p_or_seen = bfs(graph,src,dest,mincap)
-        ispath, p_or_seen = dfs(graph,src,dest,mincap, set())
+    while True: #Path is found in each loop
+        ispath, p_or_seen = bfs(graph,src,dest,totalTime,0,mincap)
+        #ispath, p_or_seen = dfs(graph,src,dest,mincap, set(), totalTime,0)
         if not ispath:
             if mincap > 0:
-                mincap = mincap // 2
+                mincap = mincap // 2 #Devides by 2 and rounds down, floordivision
                 continue
             else:
+
                 return (current_flow,
-                        { a:{b:c-graph[a][b] for b,c in d.items() if graph[a][b]<c} 
-                            for a,d in orggraph.items() },
+                        { a:{b:c[0]-graph[a][b][0] for b,c in d.items() if graph[a][b]<c} 
+                            for a,d in graph.items() },
                         p_or_seen)
-        p = p_or_seen
-        print("path:", *reversed(p))
-        saturation = min( graph[u][v] for u,v in p )
-        print(current_flow,saturation)#,[f"{u[0]}-{u[1]}:{orggraph[u[0]][u[1]]}:{graph[u][v]}" for u,v in p if u[2]==0])
-        current_flow += saturation
-        for u,v in p:
-            graph[u][v] -= saturation
-            graph[v][u] += saturation
+        
+        print("path:", *reversed(p_or_seen))
+        saturation = min( graph[u][v] for u,v in p_or_seen )
+        current_flow += saturation[0]
+        for u,v in p_or_seen:
+            graph[u][v] = (graph[u][v][0]-saturation[0],graph[u][v][1])
+            graph[v][u] = (graph[u][v][0]+saturation[0],graph[u][v][1])
 
 def program():
     nodes = int(input())
@@ -63,40 +85,42 @@ def program():
     
     graph = defaultdict(lambda: defaultdict(int))
 
-
+    maxcapacity = 0
     for i in range(numberOfRoads):
         startNode, endNode, people, time = map(int, input().split())
-        for d in range(totalTimeSteps):
-            graph[startNode+d*j][endNode+d+time*j] = people #People,time
+        for d in range(totalTimeSteps+1):
+            graph[startNode+d*1j][endNode+(d + time)*1j] = (people,time)
+            maxcapacity = max(maxcapacity,people)
+
     
     '''
-    Use imaginary numbers to create edges that match the given timestep
+    Use complex numbers to create edges that match the given timestep
     '''
 
-    print(graph)
-    
-    sink = nodes+1
+    sink = nodes+1 #Works now
+    source = source+0*1j #Correct
     
     for h in hospitals:
-        graph[h][sink] = 101#(101,0) #All hospitals have a path to the sink with unlimited space and no time cost.
+        for d in range(totalTimeSteps+1):
+            graph[h+d*1j][sink+d*1j] = (101,0) #All hospitals have a path to the sink with unlimited space and no time cost.
 
-    flow_value, residual_graph, extra = flow(graph, source, sink)
 
-    print("Own prints")
+    #Make a pillar of sink nodes, each one points downward towards th future one, 
+    # with people 101 and time 0, that way we make a final node for all
+
+    for d in range(totalTimeSteps+1):
+        graph[sink+d*1j][sink+(d+1)*1j] = (101,0)
+        graph[source+d*1j][source+(d+1)*1j] = (101,0)
+
+
+    flow_value, residual_graph, extra = flow(graph, source, sink+(totalTimeSteps)*1j,totalTimeSteps, maxcapacity)
+
+
+    if flow_value > numberOfPeople:
+        flow_value=numberOfPeople
+    
+    #Actual #print
     print(flow_value)
-    print(residual_graph)
-    print(extra)
-    print()
-
-    
-
-    
-
-
-
-
-
-
 
 for t in range(amountOfTestcases):
     program()
