@@ -113,16 +113,18 @@ def program():
         graph[(sink,d)][(sink,(d+1))] = (101,0)
         graph[(source,d)][(source,(d+1))] = (101,0)
 
-    #print({k: {kk: str(vv) for kk, vv in v.items()} for k, v in graph.items()})   
+    #print({k: {kk: str(vv) for kk, vv in v.items()} for k, v in graph.items()})
 
     flow_value, residual_graph, extra = flow(graph, (source,0), (sink,totalTimeSteps+1),totalTimeSteps, maxcapacity)
 
 
     if flow_value > numberOfPeople:
-        flow_value=numberOfPeople
+        print(numberOfPeople)
+    else:
+        print(flow_value)
     
     #Actual ##print
-    print(flow_value)
+    
 
 for t in range(amountOfTestcases):
     program()
