@@ -34,8 +34,11 @@ def bfs(graph,src,dest,time,usedTime,mincap=0): # returns path to dest or reacha
         for UpperNode in layer:
             for internalNode,cap in graph[UpperNode].items():
                 internalnode_time = internalNode[1]
-
-                if cap[0] > mincap and internalNode not in parent and usedTime <= internalnode_time and time >= usedTime:
+                destination = True
+                if internalnode_time != -1:
+                    if usedTime > internalnode_time:
+                        destination = False
+                if cap[0] > mincap and internalNode not in parent and destination and time >= usedTime:
                     parent[internalNode] = UpperNode
                     nextlayer.append(internalNode)
                     if internalNode == dest:
@@ -103,25 +106,27 @@ def program():
     
     for h in hospitals:
         for d in range(totalTimeSteps+1):
-            graph[(h,d)][(sink,d)] = (101,0) #All hospitals have a path to the sink with unlimited space and no time cost.
+            graph[(h,d)][(sink,-1)] = (101,0) #All hospitals have a path to the sink with unlimited space and no time cost.
 
 
     #Make a pillar of sink nodes, each one points downward towards th future one, 
     # with people 101 and time 0, that way we make a final node for all
 
     for d in range(totalTimeSteps+1):
-        graph[(sink,d)][(sink,(d+1))] = (101,0)
+        #graph[(sink,d)][(sink,(d+1))] = (101,0)
         graph[(source,d)][(source,(d+1))] = (101,0)
 
     #print({k: {kk: str(vv) for kk, vv in v.items()} for k, v in graph.items()})
 
-    flow_value, residual_graph, extra = flow(graph, (source,0), (sink,totalTimeSteps+1),totalTimeSteps, maxcapacity)
+    flow_value, residual_graph, extra = flow(graph, (source,0), (sink,-1),totalTimeSteps, maxcapacity)
 
-
+    #print(flow_value)
+    
     if flow_value > numberOfPeople:
         print(numberOfPeople)
     else:
         print(flow_value)
+        
     
     #Actual ##print
     
