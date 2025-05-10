@@ -33,7 +33,7 @@ def bfs(graph,src,dest,time,usedTime,mincap=0): # returns path to dest or reacha
         nextlayer = []
         for UpperNode in layer:
             for internalNode,cap in graph[UpperNode].items():
-                internalnode_time = int(internalNode.imag)
+                internalnode_time = internalNode[1]
 
                 if cap[0] > mincap and internalNode not in parent and usedTime <= internalnode_time and time >= usedTime:
                     parent[internalNode] = UpperNode
@@ -66,7 +66,7 @@ def flow(graph, src, dest, totalTime, maxcapacity):
                             for a,d in graph.items() },
                         p_or_seen)
         
-        print("path:", *reversed(p_or_seen))
+        #print("path:", *reversed(p_or_seen))
         saturation = min( graph[u][v] for u,v in p_or_seen )
         current_flow += saturation[0]
         for u,v in p_or_seen:
@@ -89,8 +89,9 @@ def program():
     for i in range(numberOfRoads):
         startNode, endNode, people, time = map(int, input().split())
         for d in range(totalTimeSteps+1):
-            graph[startNode+d*1j][endNode+(d + time)*1j] = (people,time)
-            maxcapacity = max(maxcapacity,people)
+            if d + time <= totalTimeSteps:
+                graph[(startNode,d)][(endNode,(d + time))] = (people,time)
+                maxcapacity = max(maxcapacity,people)
 
     
     '''
@@ -98,28 +99,29 @@ def program():
     '''
 
     sink = nodes+1 #Works now
-    source = source+0*1j #Correct
+    source = source #Correct
     
     for h in hospitals:
         for d in range(totalTimeSteps+1):
-            graph[h+d*1j][sink+d*1j] = (101,0) #All hospitals have a path to the sink with unlimited space and no time cost.
+            graph[(h,d)][(sink,d)] = (101,0) #All hospitals have a path to the sink with unlimited space and no time cost.
 
 
     #Make a pillar of sink nodes, each one points downward towards th future one, 
     # with people 101 and time 0, that way we make a final node for all
 
     for d in range(totalTimeSteps+1):
-        graph[sink+d*1j][sink+(d+1)*1j] = (101,0)
-        graph[source+d*1j][source+(d+1)*1j] = (101,0)
+        graph[(sink,d)][(sink,(d+1))] = (101,0)
+        graph[(source,d)][(source,(d+1))] = (101,0)
 
+    #print({k: {kk: str(vv) for kk, vv in v.items()} for k, v in graph.items()})   
 
-    flow_value, residual_graph, extra = flow(graph, source, sink+(totalTimeSteps)*1j,totalTimeSteps, maxcapacity)
+    flow_value, residual_graph, extra = flow(graph, (source,0), (sink,totalTimeSteps+1),totalTimeSteps, maxcapacity)
 
 
     if flow_value > numberOfPeople:
         flow_value=numberOfPeople
     
-    #Actual #print
+    #Actual ##print
     print(flow_value)
 
 for t in range(amountOfTestcases):
