@@ -17,19 +17,26 @@ def find_subsequences(arr, s, e, counter, end):
     if (e-1 == len(arr) and len(arr[s:e]) != 1 and sum == 47):
         counter =+ 1
         find_subsequences(arr, (s+1), e, counter, end)
+
     elif (e-1 == len(arr) and len(arr[s:e]) != 1):
         find_subsequences(arr, (s+1), e, counter, end)
+
     elif (e-1 == len(arr) and len(arr[s:e]) == 1):
         return counter
+
     elif (len(arr[s:e]) == 1 and sum > 47):
         find_subsequences(arr, s, (e+1), counter, end)
+
     elif (sum < 47):
         find_subsequences(arr, s, (e+1), counter, end)
+
     elif (sum == 47):
         counter += 1
         find_subsequences(arr, (s+1), e, counter, end)
+
     elif (sum > 47):
         find_subsequences(arr, (s+1), e, counter, end)
+
     return counter
 
 ##NEW
