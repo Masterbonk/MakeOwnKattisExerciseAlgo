@@ -14,5 +14,5 @@ include:
 current subsequence +1
 
 Edgecase: index 0 < 0
-If the first element in the subsequence is < 0, 
-check with and without it
+- If the first element in the subsequence is < 0, check with and without it
+- if a single element is over 47
