@@ -32,8 +32,7 @@ def bfs(graph,src,dest,time,usedTime,mincap=0): # returns path to dest or reacha
     while layer:
         nextlayer = []
         for UpperNode in layer:
-            print(UpperNode)
-            for internalNode,cap in graph[UpperNode].items():
+            for internalNode,cap in graph.get(UpperNode, {}).items():
                 internalnode_time = internalNode[1]
                 destination = True
                 if internalnode_time != -1:
@@ -96,6 +95,8 @@ def program():
             if d + time <= totalTimeSteps:
                 if (startNode, d) not in graph:
                     graph[(startNode, d)] = {}
+                if (endNode,(d + time)) not in graph:
+                    graph[endNode,(d + time)] = {}
                 graph[(startNode,d)][(endNode,(d + time))] = (people,time)
                 maxcapacity = max(maxcapacity,people)
 
@@ -111,6 +112,8 @@ def program():
         for d in range(totalTimeSteps+1):
             if (h, d) not in graph:
                     graph[(h, d)] = {}
+            if (sink,-1) not in graph:
+                    graph[(sink,-1)] = {}
             graph[(h,d)][(sink,-1)] = (101,0) #All hospitals have a path to the sink with unlimited space and no time cost.
 
 
