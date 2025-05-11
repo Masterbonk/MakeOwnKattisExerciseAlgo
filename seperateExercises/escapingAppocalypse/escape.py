@@ -33,7 +33,6 @@ def bfs(graph,src,dest,time,usedTime,mincap=0): # returns path to dest or reacha
     queue = deque([src])
     while queue:
         UpperNode = queue.popleft()
-        #print("UpperNode: "+str(UpperNode))
         for internalNode,cap in graph[UpperNode].items():
             if cap[0] > mincap and internalNode not in parent and time >= usedTime: #and destination
                 parent[internalNode] = UpperNode
@@ -48,7 +47,7 @@ def bfs(graph,src,dest,time,usedTime,mincap=0): # returns path to dest or reacha
     return (False,set(parent))
    
 
-def flow(graph, src, dest, totalTime, maxcapacity):
+def flow(graph, src, dest, totalTime, maxcapacity, numberOfPeople):
     current_flow = 0
     mincap = maxcapacity#1 << (maxcapacity.bit_length() - 1) if maxcapacity > 0 else 0# set to 0 to disable capacity scaling
     while True: #Path is found in each loop
@@ -67,6 +66,11 @@ def flow(graph, src, dest, totalTime, maxcapacity):
         #print("path:", *reversed(p_or_seen))
         saturation = min( graph[u][v] for u,v in p_or_seen )
         current_flow += saturation[0]
+
+        if current_flow == numberOfPeople:
+            return (current_flow,
+                        None,
+                        None)
         
         for u,v in p_or_seen:
             graph[u][v] = (graph[u][v][0]-saturation[0],graph[u][v][1])
@@ -129,7 +133,7 @@ def program():
 
     #print({k: {kk: str(vv) for kk, vv in v.items()} for k, v in graph.items()})
 
-    flow_value, _, _ = flow(graph, (source,0), (sink,-1),totalTimeSteps, maxcapacity)
+    flow_value, _, _ = flow(graph, (source,0), (sink,-1),totalTimeSteps, maxcapacity, numberOfPeople)
 
     #print(flow_value)
 
