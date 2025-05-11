@@ -33,10 +33,9 @@ def bfs(graph,src,dest,time,usedTime,mincap=0): # returns path to dest or reacha
         nextlayer = []
         for UpperNode in layer:
             for internalNode,cap in graph[UpperNode].items():
-                internalnode_time = internalNode[1]
                 destination = True
-                if internalnode_time != -1:
-                    if usedTime > internalnode_time:
+                if internalNode[1] != -1:
+                    if usedTime > internalNode[1]:
                         destination = False
                 if cap[0] > mincap and internalNode not in parent and destination and time >= usedTime:
                     parent[internalNode] = UpperNode
@@ -52,7 +51,7 @@ def bfs(graph,src,dest,time,usedTime,mincap=0): # returns path to dest or reacha
     return (False,set(parent))
    
 
-def flow(graph, src, dest, totalTime, maxcapacity, numberOfPeople):
+def flow(graph, src, dest, totalTime, maxcapacity):
     current_flow = 0
     mincap = maxcapacity # set to 0 to disable capacity scaling
     while True: #Path is found in each loop
@@ -65,8 +64,8 @@ def flow(graph, src, dest, totalTime, maxcapacity, numberOfPeople):
             else:
 
                 return (current_flow,
-                        { },
-                        set())
+                        None,
+                        None)
         
         #print("path:", *reversed(p_or_seen))
         saturation = min( graph[u][v] for u,v in p_or_seen )
@@ -119,7 +118,7 @@ def program():
 
     #print({k: {kk: str(vv) for kk, vv in v.items()} for k, v in graph.items()})
 
-    flow_value, _, _ = flow(graph, (source,0), (sink,-1),totalTimeSteps, maxcapacity, numberOfPeople)
+    flow_value, _, _ = flow(graph, (source,0), (sink,-1),totalTimeSteps, maxcapacity)
 
     #print(flow_value)
 
