@@ -71,6 +71,7 @@ def flow(graph, src, dest, totalTime, maxcapacity, numberOfPeople):
     current_flow = 0
     mincap = maxcapacity#1 << (maxcapacity.bit_length() - 1) if maxcapacity > 0 else 0# set to 0 to disable capacity scaling
     while True: #Path is found in each loop
+
         ispath, p_or_seen = bfs(graph,src,dest,totalTime,0,mincap)
         #ispath, p_or_seen = dfs(graph,src,dest,mincap, set(), totalTime,0)
         if not ispath:
@@ -78,19 +79,14 @@ def flow(graph, src, dest, totalTime, maxcapacity, numberOfPeople):
                 mincap = mincap // 2 #Devides by 2 and rounds down, floordivision
                 continue
             else:
-
-                return (current_flow,
-                        None,
-                        None)
+                return (current_flow, None, None)
         
         #print("path:", *reversed(p_or_seen))
-        saturation = min( graph[u][v] for u,v in p_or_seen )
+        saturation = min(graph[u][v] for u,v in p_or_seen )
         current_flow += saturation[0]
 
-        if current_flow == numberOfPeople:
-            return (current_flow,
-                        None,
-                        None)
+        if current_flow >= numberOfPeople:
+            return (numberOfPeople, None, None)
         
         for u,v in p_or_seen:
             graph[u][v] = (graph[u][v][0]-saturation[0],graph[u][v][1])
