@@ -6,6 +6,7 @@ sys.setrecursionlimit(10**6)
 
 '''
 How to make it faster:
+Prayer
 '''
 
 amountOfTestcases = int(input())
@@ -28,6 +29,25 @@ amountOfTestcases = int(input())
                 return (True,p)
     return (False,seen)
 '''
+def smallbfs(source, totalTimeSteps, road_list):
+    reachable = set()
+    queue = deque([(source, 0)])
+    while queue:
+        u, t = queue.popleft()
+        if (u, t) in reachable: continue
+        reachable.add((u, t))
+
+        # For every edge out of u
+        for (startNode, endNode, people, time) in road_list:
+            if startNode == u and t + time <= totalTimeSteps:
+                if (endNode, t + time) not in reachable:
+                    queue.append((endNode, t + time))
+        
+        # Allow "wait" edge
+        if t + 1 <= totalTimeSteps:
+            queue.append((u, t + 1))
+    return reachable
+
 def bfs(graph,src,dest,time,usedTime,mincap=0): # returns path to dest or reachable set
     parent = {src:src}
     queue = deque([src])
@@ -89,22 +109,30 @@ def program():
     graph = dict()
 
     maxcapacity = 0
+
+    road_list = [(0,0,0,0)]*numberOfRoads
     for i in range(numberOfRoads):
         startNode, endNode, people, time = map(int, input().split())
+        road_list[i] = (startNode, endNode, people, time)
+
+    reachable = smallbfs(source,totalTimeSteps,road_list)
+    
+    for i in range(numberOfRoads):
+        startNode, endNode, people, time = road_list[i]
         for d in range(totalTimeSteps+1):
-            if d + time <= totalTimeSteps:
+            if d + time <= totalTimeSteps and (startNode, d) in reachable and (endNode, d + time) in reachable:
                 if (startNode, d) not in graph:
                     graph[(startNode, d)] = dict()
                 if (endNode,(d + time)) not in graph:
                     graph[(endNode,(d + time))] = dict()
                 graph[(startNode,d)][(endNode,(d + time))] = (people,time)
                 maxcapacity = max(maxcapacity,people)
+    
     '''
     Use complex numbers to create edges that match the given timestep
     '''
 
     sink = nodes+1 #Works now
-    source = source #Correct
     graph[(sink,-1)] = dict()
 
     
