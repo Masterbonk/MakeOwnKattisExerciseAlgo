@@ -52,7 +52,7 @@ def bfs(graph,src,dest,time,usedTime,mincap=0): # returns path to dest or reacha
     return (False,set(parent))
    
 
-def flow(graph, src, dest, totalTime, maxcapacity):
+def flow(graph, src, dest, totalTime, maxcapacity, numberOfPeople):
     current_flow = 0
     mincap = maxcapacity # set to 0 to disable capacity scaling
     while True: #Path is found in each loop
@@ -110,22 +110,26 @@ def program():
     #Make a pillar of sink nodes, each one points downward towards th future one, 
     # with people 101 and time 0, that way we make a final node for all
 
+    '''
     for d in range(totalTimeSteps+1):
         graph[(source,d)][(source,(d+1))] = (101,0)
+    '''
+    for d in range(totalTimeSteps+1):
+        graph[(source,0)].update(graph[(source,d)])
 
     #print({k: {kk: str(vv) for kk, vv in v.items()} for k, v in graph.items()})
 
-    flow_value, residual_graph, extra = flow(graph, (source,0), (sink,-1),totalTimeSteps, maxcapacity, numberOfPeople)
+    flow_value, _, _ = flow(graph, (source,0), (sink,-1),totalTimeSteps, maxcapacity, numberOfPeople)
 
     #print(flow_value)
+
+    #Actual ##print
     
     if flow_value > numberOfPeople:
         print(numberOfPeople)
     else:
         print(flow_value)
-        
     
-    #Actual ##print
     
 
 for t in range(amountOfTestcases):
