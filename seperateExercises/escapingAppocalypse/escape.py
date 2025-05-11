@@ -107,13 +107,12 @@ def program():
 
     sink = nodes+1 #Works now
     source = source #Correct
+    graph[(sink,-1)] = {}
     
     for h in hospitals:
         for d in range(totalTimeSteps+1):
             if (h, d) not in graph:
                     graph[(h, d)] = {}
-            if (sink,-1) not in graph:
-                    graph[(sink,-1)] = {}
             graph[(h,d)][(sink,-1)] = (101,0) #All hospitals have a path to the sink with unlimited space and no time cost.
 
 
