@@ -38,7 +38,7 @@ def smallbfs(source, totalTimeSteps, road_list):
         reachable.add((u, t))
 
         # For every edge out of u
-        for (startNode, endNode, people, time) in road_list:
+        for (startNode, endNode, _, time) in road_list:
             if startNode == u and t + time <= totalTimeSteps:
                 if (endNode, t + time) not in reachable:
                     queue.append((endNode, t + time))
@@ -135,7 +135,6 @@ def program():
     sink = nodes+1 #Works now
     graph[(sink,-1)] = dict()
 
-    
     for h in hospitals:
         for d in range(totalTimeSteps+1):
             if (h,d) not in graph:
