@@ -65,13 +65,13 @@ def flow(graph, src, dest, totalTime, maxcapacity):
             else:
 
                 return (current_flow,
-                        { a:{b:c[0]-graph[a][b][0] for b,c in d.items() if graph[a][b]<c} 
-                            for a,d in graph.items() },
-                        p_or_seen)
+                        { },
+                        set())
         
         #print("path:", *reversed(p_or_seen))
         saturation = min( graph[u][v] for u,v in p_or_seen )
         current_flow += saturation[0]
+        
         for u,v in p_or_seen:
             graph[u][v] = (graph[u][v][0]-saturation[0],graph[u][v][1])
             graph[v][u] = (graph[u][v][0]+saturation[0],graph[u][v][1])
@@ -95,8 +95,6 @@ def program():
             if d + time <= totalTimeSteps:
                 graph[(startNode,d)][(endNode,(d + time))] = (people,time)
                 maxcapacity = max(maxcapacity,people)
-
-    
     '''
     Use complex numbers to create edges that match the given timestep
     '''
@@ -117,7 +115,7 @@ def program():
 
     #print({k: {kk: str(vv) for kk, vv in v.items()} for k, v in graph.items()})
 
-    flow_value, residual_graph, extra = flow(graph, (source,0), (sink,-1),totalTimeSteps, maxcapacity)
+    flow_value, residual_graph, extra = flow(graph, (source,0), (sink,-1),totalTimeSteps, maxcapacity, numberOfPeople)
 
     #print(flow_value)
     
