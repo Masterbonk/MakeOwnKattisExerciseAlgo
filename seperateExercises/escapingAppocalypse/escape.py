@@ -32,6 +32,7 @@ def bfs(graph,src,dest,time,usedTime,mincap=0): # returns path to dest or reacha
     while layer:
         nextlayer = []
         for UpperNode in layer:
+            print(UpperNode)
             for internalNode,cap in graph[UpperNode].items():
                 internalnode_time = internalNode[1]
                 destination = True
@@ -86,13 +87,15 @@ def program():
     
     numberOfRoads = int(input())
     
-    graph = defaultdict(lambda: defaultdict(int))
+    graph = {}
 
     maxcapacity = 0
     for i in range(numberOfRoads):
         startNode, endNode, people, time = map(int, input().split())
         for d in range(totalTimeSteps+1):
             if d + time <= totalTimeSteps:
+                if (startNode, d) not in graph:
+                    graph[(startNode, d)] = {}
                 graph[(startNode,d)][(endNode,(d + time))] = (people,time)
                 maxcapacity = max(maxcapacity,people)
 
@@ -106,6 +109,8 @@ def program():
     
     for h in hospitals:
         for d in range(totalTimeSteps+1):
+            if (h, d) not in graph:
+                    graph[(h, d)] = {}
             graph[(h,d)][(sink,-1)] = (101,0) #All hospitals have a path to the sink with unlimited space and no time cost.
 
 
@@ -113,6 +118,8 @@ def program():
     # with people 101 and time 0, that way we make a final node for all
 
     for d in range(totalTimeSteps+1):
+        if (source, d) not in graph:
+                    graph[(source, d)] = {}
         graph[(source,d)][(source,(d+1))] = (101,0)
 
     #print({k: {kk: str(vv) for kk, vv in v.items()} for k, v in graph.items()})
