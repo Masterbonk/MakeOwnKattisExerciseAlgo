@@ -113,7 +113,6 @@ def program():
     # with people 101 and time 0, that way we make a final node for all
 
     for d in range(totalTimeSteps+1):
-        #graph[(sink,d)][(sink,(d+1))] = (101,0)
         graph[(source,d)][(source,(d+1))] = (101,0)
 
     #print({k: {kk: str(vv) for kk, vv in v.items()} for k, v in graph.items()})
