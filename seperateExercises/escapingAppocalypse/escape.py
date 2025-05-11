@@ -1,5 +1,7 @@
 from collections import defaultdict
+from collections import deque
 import sys
+
 sys.setrecursionlimit(10**6)
 
 '''
@@ -28,26 +30,25 @@ amountOfTestcases = int(input())
 '''
 def bfs(graph,src,dest,time,usedTime,mincap=0): # returns path to dest or reachable set
     parent = {src:src}
-    layer = [src]
-    while layer:
-        nextlayer = []
-        for UpperNode in layer:
-            for internalNode,cap in graph[UpperNode].items():
-                destination = True
-                if internalNode[1] != -1:
-                    if usedTime > internalNode[1]:
-                        destination = False
-                if cap[0] > mincap and internalNode not in parent and destination and time >= usedTime:
-                    parent[internalNode] = UpperNode
-                    nextlayer.append(internalNode)
-                    if internalNode == dest:
-                        p =  []
-                        current_vertex = dest
-                        while src != current_vertex:
-                            p.append((parent[current_vertex],current_vertex))
-                            current_vertex = parent[current_vertex]
-                        return (True,p)
-        layer = nextlayer
+    queue = deque([src])
+    while queue:
+        UpperNode = queue.popleft()
+        for internalNode,cap in graph[UpperNode].items():
+            '''destination = True
+            if internalNode[1] != -1:
+                if usedTime > internalNode[1]:
+                    destination = False
+            '''
+            if cap[0] > mincap and internalNode not in parent and time >= usedTime: #and destination
+                parent[internalNode] = UpperNode
+                queue.append(internalNode)
+                if internalNode == dest:
+                    p =  []
+                    current_vertex = dest
+                    while src != current_vertex:
+                        p.append((parent[current_vertex],current_vertex))
+                        current_vertex = parent[current_vertex]
+                    return (True,p)
     return (False,set(parent))
    
 
