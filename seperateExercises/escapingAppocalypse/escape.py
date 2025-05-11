@@ -33,12 +33,8 @@ def bfs(graph,src,dest,time,usedTime,mincap=0): # returns path to dest or reacha
     queue = deque([src])
     while queue:
         UpperNode = queue.popleft()
+        #print("UpperNode: "+str(UpperNode))
         for internalNode,cap in graph[UpperNode].items():
-            '''destination = True
-            if internalNode[1] != -1:
-                if usedTime > internalNode[1]:
-                    destination = False
-            '''
             if cap[0] > mincap and internalNode not in parent and time >= usedTime: #and destination
                 parent[internalNode] = UpperNode
                 queue.append(internalNode)
@@ -54,7 +50,7 @@ def bfs(graph,src,dest,time,usedTime,mincap=0): # returns path to dest or reacha
 
 def flow(graph, src, dest, totalTime, maxcapacity):
     current_flow = 0
-    mincap = maxcapacity # set to 0 to disable capacity scaling
+    mincap = maxcapacity#1 << (maxcapacity.bit_length() - 1) if maxcapacity > 0 else 0# set to 0 to disable capacity scaling
     while True: #Path is found in each loop
         ispath, p_or_seen = bfs(graph,src,dest,totalTime,0,mincap)
         #ispath, p_or_seen = dfs(graph,src,dest,mincap, set(), totalTime,0)
@@ -86,13 +82,17 @@ def program():
     
     numberOfRoads = int(input())
     
-    graph = defaultdict(lambda: defaultdict(int))
+    graph = dict()
 
     maxcapacity = 0
     for i in range(numberOfRoads):
         startNode, endNode, people, time = map(int, input().split())
         for d in range(totalTimeSteps+1):
             if d + time <= totalTimeSteps:
+                if (startNode, d) not in graph:
+                    graph[(startNode, d)] = dict()
+                if (endNode,(d + time)) not in graph:
+                    graph[(endNode,(d + time))] = dict()
                 graph[(startNode,d)][(endNode,(d + time))] = (people,time)
                 maxcapacity = max(maxcapacity,people)
     '''
@@ -101,21 +101,31 @@ def program():
 
     sink = nodes+1 #Works now
     source = source #Correct
+    graph[(sink,-1)] = dict()
+
     
     for h in hospitals:
         for d in range(totalTimeSteps+1):
+            if (h,d) not in graph:
+                    graph[(h,d)] = dict()
             graph[(h,d)][(sink,-1)] = (101,0) #All hospitals have a path to the sink with unlimited space and no time cost.
 
 
     #Make a pillar of sink nodes, each one points downward towards th future one, 
     # with people 101 and time 0, that way we make a final node for all
 
-    '''
+    
     for d in range(totalTimeSteps+1):
+        if (source,d) not in graph:
+            graph[(source,d)] = dict()
+        if (source,(d+1)) not in graph:
+            graph[(source,(d+1))] = dict()
         graph[(source,d)][(source,(d+1))] = (101,0)
+    
     '''
     for d in range(totalTimeSteps+1):
         graph[(source,0)].update(graph[(source,d)])
+    '''
 
     #print({k: {kk: str(vv) for kk, vv in v.items()} for k, v in graph.items()})
 
