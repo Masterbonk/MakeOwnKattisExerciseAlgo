@@ -1,14 +1,47 @@
+import sys
+
+sys.setrecursionlimit(10**6)
+
+def find_occurrences(arr, goal, index):
+    counter = 0
+    i = 0
+    while i == 0:
+        if arr[index] == goal:
+            index -= 1
+        elif arr[index] < goal:
+            i += 1
+    while i == 1:
+        if len(arr)-1 == index and arr[index] == goal:
+            counter += 1
+            return counter
+        elif len(arr)-1 == index:
+            return counter
+        elif arr[index] < goal:
+            index += 1
+        elif arr[index] == goal:
+            counter += 1
+            index += 1
+        elif arr[index] > goal:
+            i += 1
+        else:
+            return counter
+    return counter
+
 #Binary search tree
 def search(arr, goal):
     counter = 0
-    if arr[round(len(arr)/2)] < goal:
-        search(arr[:len(arr)/2])
-    elif arr[round(len(arr)/2)] > goal:
-        search(arr[len(arr)/2:])
-    elif arr[round(len(arr)/2)] == goal:
+    index = round(len(arr)/2)
+    if len(arr) <= 1 and arr[index] != goal:
+        return counter
+    elif arr[index] < goal:
+        return search(arr[index:], goal)
+    elif arr[index] > goal:
+        return search(arr[:index], goal)
+    elif arr[index] == goal:
         #Make a function that goes backwards until it comes across something that is not goal
-        counter += 1
-    return counter
+        #c = find_occurrences(arr, goal, index)
+        counter += 1 #c
+        return counter
 
 #----------------------------------------------
 
@@ -27,25 +60,12 @@ def make_prefix_sum_arr(arr):
             prefix.append(int(arr[i]) + int(prefix[i-1]))
     return prefix, counter
 
-#Counts the subsequences that sum to 47
-# def count_subsequences(arr):
-#     counter = 0
-#     for i in range(len(arr)):
-#         if arr[i] == 47:
-#             counter += 1
-#         for j in range(i+1,len(arr)):
-#             if (arr[j] - arr[i]) == 47:
-#                 counter += 1
-#     return counter
 
 def count_subsequences(order, arr):
     counter = 0
-    for i in order:
-        c = search(arr[:i], i+47)
-        if c > 0:
-            counter += c
-        else:
-            continue
+    for i in range(len(order)):
+        c = search(arr[i:], order[i]+47)
+        counter += c
     return counter
 
 #----------------------------------------------------------------
@@ -57,5 +77,4 @@ for i in range(cases):
     lst = input().strip().split()
     psa, counter = make_prefix_sum_arr(lst)
     sort = sorted(psa)
-    #print(psa)
     print(count_subsequences(psa, sort) + counter)
