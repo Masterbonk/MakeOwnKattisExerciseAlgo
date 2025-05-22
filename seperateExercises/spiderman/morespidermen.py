@@ -81,13 +81,3 @@ for _ in range(n):
                 break
         if not found:
             print("IMPOSSIBLE")
-
-    
-                    
-
-
-
-
-
-
-   
