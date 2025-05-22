@@ -42,7 +42,7 @@ for _ in range(n):
         letsSee = set()
         for smth in checkNext:
             if arr[smth[0]+distances[x-1]][x] != 0:
-                if min>arr[smth[0]+distances[x-1]][x]:
+                if min>arr[smth[0]+distances[x-1]][x]:#can you always follow the min?
                     letsSee.clear()
                     min = arr[smth[0]+distances[x-1]][x]
                     letsSee.add((smth[0]+distances[x-1],smth[1]+"U"))
@@ -55,7 +55,7 @@ for _ in range(n):
                         min = arr[smth[0]-distances[x-1]][x]
                         letsSee.add((smth[0]-distances[x-1],smth[1]+"D"))
                     elif min == arr[smth[0]-distances[x-1]][x]:
-                        letsSee.add((smth[0]+distances[x-1],smth[1]+"D"))
+                        letsSee.add((smth[0]-distances[x-1],smth[1]+"D"))
         if len(letsSee)==0:
             justStop = True
             break
@@ -64,8 +64,21 @@ for _ in range(n):
             for uh in letsSee:
                 answer += uh[1]
                 save = uh[0]
-            letsSee.clear()
+            letsSee.clear()#maybe move this into the for loop
             letsSee.add((save,""))
+        else:
+            same = True
+            prev = (-1,"")
+            for value in letsSee:
+                if value[0]==prev[0] or prev[0]==-1:
+                    prev = value
+                else:
+                    same = False
+                    break
+            if same:
+                answer += prev[1]
+                letsSee.clear()
+                letsSee.add((prev[0],""))
             
         checkNext = letsSee
     min = math.inf
