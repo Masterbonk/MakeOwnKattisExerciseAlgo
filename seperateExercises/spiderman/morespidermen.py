@@ -17,7 +17,7 @@ def buildTable(m):
                 arr[smth+distances[x]][x] = max(smth+distances[x], arr[smth][x+1])
             new.add(smth+distances[x])
             if smth-distances[x]>=0:
-                if  arr[smth-distances[x]][x]==0 or arr[smth-distances[x]][x]>smth:
+                if  arr[smth-distances[x]][x]==0 or arr[smth-distances[x]][x]>arr[smth][x+1]:
                     arr[smth-distances[x]][x] = arr[smth][x+1]
                 new.add(smth-distances[x])
         next = new
@@ -59,7 +59,7 @@ for _ in range(n):
         if len(letsSee)==0:
             justStop = True
             break
-        elif len(letsSee)==1:
+        elif len(letsSee)==1:#make sure you are only seeing the maximum
             save = 0
             for uh in letsSee:
                 answer += uh[1]

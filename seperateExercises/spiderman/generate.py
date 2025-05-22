@@ -1,8 +1,8 @@
 import random
-n = random.randint(1,101)
+n = 1
 print(str(n))
 for _ in range(n):
-    m = 40
+    m = 10
     print(str(m))
     distances = []
     for _ in range(m):
