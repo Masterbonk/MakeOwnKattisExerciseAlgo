@@ -1,6 +1,6 @@
 import random
 #t = random.randint(1,10)
-f = open(f"10000", "w")
+f = open(f"10ThatWorks", "w")
 
 
 t=10
@@ -8,7 +8,7 @@ f.writelines(str(t)+ '\n')
 for _ in range(t):
     f.writelines('\n')
     #n = random.randint(1,1000000)
-    n = 10000
+    n = 10
     f.writelines(str(n)+ '\n')
     list = []
     for _ in range(n):
