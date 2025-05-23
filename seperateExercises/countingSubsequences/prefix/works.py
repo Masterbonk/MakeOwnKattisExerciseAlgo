@@ -5,23 +5,20 @@ def make_prefix_sum_arr(arr):
     #counter = 0
     for i in range(len(arr)):
         if i == 0:
-            #if arr[i] == 47:
-            #    counter += 1
             prefix.append(int(arr[i]))
         else:
-            #if arr[i] == 47:
-            #    counter += 1
             prefix.append(int(arr[i]) + int(prefix[i-1]))
-    return prefix#, counter
+    return prefix
 
 #Counts the subsequences that sum to 47
-def count_subsequences(arr):
+def count_subsequences(prefix):
     counter = 0
-    for i in range(len(arr)):
-        if arr[i] == 47:
-            counter += 1
-        for j in range(i+1,len(arr)):
-            if (arr[j] - arr[i]) == 47:
+    for i in range(len(prefix)):
+        if prefix[i] == 47:
+            counter += 1 ##This runs
+        for j in range(i+1,len(prefix)):
+            if (prefix[j] - prefix[i]) == 47:
+                print(str(i))
                 counter += 1
     return counter
 
@@ -32,6 +29,6 @@ for i in range(cases):
     input()  #To deal with the line before each case
     amount = int(input())
     lst = input().strip().split()
-    psa = make_prefix_sum_arr(lst)
+    prefix = make_prefix_sum_arr(lst)
     #print(psa)
-    print(count_subsequences(psa))
+    print(count_subsequences(prefix))

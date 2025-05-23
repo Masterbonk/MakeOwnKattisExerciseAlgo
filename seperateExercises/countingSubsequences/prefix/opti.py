@@ -17,6 +17,8 @@ def make_prefix_sum_arr(arr):
     #print(tracker)
     #print(prefix)
     #tracker[max(tracker)+47] = 1
+    #if 47 in tracker:
+    #    print("47 is in tracker")
     return prefix, tracker
 
 #Counts the subsequences that sum to 47
@@ -27,13 +29,22 @@ def count_subsequences(prefix, tracker):
         #print("Counter Before: "+str(counter))
         if i == 0 and prefix[i] == 47:
             counter += 1
-        if prefix[i] + 47 in tracker:
+        if prefix[i] == 47:
+            counter += 1
+        elif prefix[i] + 47 in tracker :
+            #if tracker[prefix[i]+47] != 0:
+            #    print(tracker[prefix[i]+47])
+            #if tracker[prefix[i]+47] < 0:
+            #    print("THIS SHOULD NOT HAPPEN")
+        
             counter += tracker[prefix[i]+47]#*tracker[prefix[i]]#tracker.pop(arr[i]+47)*tracker[arr[i]]
         if prefix[i] in tracker:
             tracker[prefix[i]] -= 1
         #print("Counter After: "+str(counter))
     return counter
+'''
 
+'''
 #----------------------------------------------------------------
 cases = int(input())
 
