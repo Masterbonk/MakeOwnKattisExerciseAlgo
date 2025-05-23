@@ -4,8 +4,6 @@ from collections import defaultdict
 def make_prefix_sum_arr(arr):
     prefix = [0]*len(arr)
     tracker = defaultdict(int)
-    #tracker[0] = 1
-
     for i in range(len(arr)):
        
         if i == 0:
@@ -14,32 +12,20 @@ def make_prefix_sum_arr(arr):
         else:
             tracker[int(arr[i]) + int(prefix[i-1])] += 1
             prefix[i] = (int(arr[i]) + int(prefix[i-1])) 
-    #print(tracker)
-    #print(prefix)
-    #tracker[max(tracker)+47] = 1
-    #if 47 in tracker:
-    #    print("47 is in tracker")
     return prefix, tracker
 
 #Counts the subsequences that sum to 47
 def count_subsequences(prefix, tracker):
     counter = 0
     for i in range(len(prefix)):
-        #print(str(i) +" is i and this is prefix "+str(prefix[i]) + " tracker "+str(prefix[i]+47)+" has: "+ str(tracker[prefix[i]+47]))
-        #print("Counter Before: "+str(counter))
-        #if i == 0 and prefix[i] == 47:
-        #    counter += 1
         if prefix[i] == 47:
             counter += 1
         if prefix[i] + 47 in tracker :
-            counter += tracker[prefix[i]+47]#*tracker[prefix[i]]#tracker.pop(arr[i]+47)*tracker[arr[i]]
+            counter += tracker[prefix[i]+47]
         if prefix[i] in tracker:
             tracker[prefix[i]] -= 1
-        #print("Counter After: "+str(counter))
     return counter
-'''
 
-'''
 #----------------------------------------------------------------
 cases = int(input())
 
@@ -48,6 +34,4 @@ for i in range(cases):
     amount = int(input())
     lst = input().strip().split()
     prefix, tracker = make_prefix_sum_arr(lst)
-    #print(psa)
-    #print(tracker)
     print(count_subsequences(prefix, tracker))
