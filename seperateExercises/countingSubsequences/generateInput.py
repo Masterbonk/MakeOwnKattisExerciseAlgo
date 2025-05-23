@@ -1,13 +1,16 @@
 import random
 #t = random.randint(1,10)
+f = open(f"10000", "w")
+
+
 t=10
-print(str(t))
+f.writelines(str(t)+ '\n')
 for _ in range(t):
-    print()
+    f.writelines('\n')
     #n = random.randint(1,1000000)
-    n = 1000000
-    print(str(n))
+    n = 10000
+    f.writelines(str(n)+ '\n')
     list = []
     for _ in range(n):
         list.append(random.randint(-20000,20000))
-    print(' '.join(str(x) for x in list))
+    f.writelines(' '.join(str(x) for x in list)+ '\n')

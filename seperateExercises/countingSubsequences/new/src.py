@@ -4,10 +4,11 @@ sys.setrecursionlimit(10**6) #This is to deal with the recursionerror. The norma
 
 
 ##Sums the given array
-def sum_arr(arr):
-    sum = 0
-    for i in arr:
-        sum += int(i)
+def sum_arr(arr, start,end):
+    if start != 0:
+        sum = arr[end]-arr[start-1]
+    else:
+        sum = arr[end]
     return sum
 
 ##OLD
@@ -46,7 +47,7 @@ def new_find_subsequences(arr):
     e = 1
     counter = 0
     while True:
-        sum = sum_arr(arr[s:e])
+        sum = sum_arr(arr,s,e)
         if (e-1 == len(arr) and len(arr[s:e]) != 1 and sum == 47):
             counter =+ 1
             s += 1
@@ -65,12 +66,28 @@ def new_find_subsequences(arr):
             s += 1
     return counter
 
+def make_prefix_sum_arr(arr):
+    prefix = []
+    #counter = 0
+    for i in range(len(arr)):
+        if i == 0:
+            #if arr[i] == 47:
+            #    counter += 1
+            prefix.append(int(arr[i]))
+        else:
+            #if arr[i] == 47:
+            #    counter += 1
+            prefix.append(int(arr[i]) + int(prefix[i-1]))
+    return prefix#, counter
 ##----------------------------------------------------------------
 cases = int(input())
+
+
 
 for i in range(cases):
     input()  #To deal with the line before each case
     amount = int(input())
     lst = input().strip().split()
-    print(find_subsequences(lst, 0, 1, 0, amount))
-    #print(new_find_subsequences(lst))
+    newLst = make_prefix_sum_arr(lst)
+    #print(find_subsequences(lst, 0, 1, 0, amount))
+    print(new_find_subsequences(newLst))
