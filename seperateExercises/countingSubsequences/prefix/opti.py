@@ -14,18 +14,24 @@ def make_prefix_sum_arr(arr):
         else:
             tracker[int(arr[i]) + int(prefix[i-1])] += 1
             prefix[i] = (int(arr[i]) + int(prefix[i-1])) 
-    print(tracker)
-    print(prefix)
+    #print(tracker)
+    #print(prefix)
+    #tracker[max(tracker)+47] = 1
     return prefix, tracker
 
 #Counts the subsequences that sum to 47
 def count_subsequences(prefix, tracker):
     counter = 0
     for i in range(len(prefix)):
-        if prefix[i] + 47 in tracker:
+        #print(str(i) +" is i and this is prefix "+str(prefix[i]))
+        #print("Before: "+str(counter))
+        if i == len(prefix)-1 and prefix[i]-prefix[i-1] == 47:
+            counter += 1
+        elif prefix[i] + 47 in tracker:
             counter += tracker[prefix[i]+47]#*tracker[prefix[i]]#tracker.pop(arr[i]+47)*tracker[arr[i]]
         if prefix[i] in tracker:
             tracker[prefix[i]] -= 1
+        #print("After: "+str(counter))
     return counter
 
 #----------------------------------------------------------------
