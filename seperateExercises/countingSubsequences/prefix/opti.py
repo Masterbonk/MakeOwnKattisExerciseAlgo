@@ -14,7 +14,8 @@ def make_prefix_sum_arr(arr):
         else:
             tracker[int(arr[i]) + int(prefix[i-1])] += 1
             prefix[i] = (int(arr[i]) + int(prefix[i-1])) 
-            
+    print(tracker)
+    print(prefix)
     return prefix, tracker
 
 #Counts the subsequences that sum to 47
