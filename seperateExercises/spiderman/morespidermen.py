@@ -59,7 +59,7 @@ for _ in range(n):
         if len(letsSee)==0:
             justStop = True
             break
-        elif len(letsSee)==1:#make sure you are only seeing the maximum
+        elif len(letsSee)==1:
             save = 0
             for uh in letsSee:
                 answer += uh[1]
