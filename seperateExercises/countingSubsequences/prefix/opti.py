@@ -4,7 +4,7 @@ from collections import defaultdict
 def make_prefix_sum_arr(arr):
     prefix = [0]*len(arr)
     tracker = defaultdict(int)
-    tracker[0] = 1
+    #tracker[0] = 1
 
     for i in range(len(arr)):
        
@@ -25,10 +25,6 @@ def count_subsequences(prefix, tracker):
     for i in range(len(prefix)):
         #print(str(i) +" is i and this is prefix "+str(prefix[i]) + " tracker "+str(prefix[i]+47)+" has: "+ str(tracker[prefix[i]+47]))
         #print("Counter Before: "+str(counter))
-        #if (i != 0 and prefix[i]-prefix[i-1] == 47) or (i == 0 and prefix[i] == 47):
-        #    counter += 1
-        #if i == len(prefix)-1 and i != 0 and prefix[i]-prefix[i-1] == 47 and tracker:
-        #    counter += 1
         if i == 0 and prefix[i] == 47:
             counter += 1
         if prefix[i] + 47 in tracker:
