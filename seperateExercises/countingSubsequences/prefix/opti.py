@@ -27,16 +27,11 @@ def count_subsequences(prefix, tracker):
     for i in range(len(prefix)):
         #print(str(i) +" is i and this is prefix "+str(prefix[i]) + " tracker "+str(prefix[i]+47)+" has: "+ str(tracker[prefix[i]+47]))
         #print("Counter Before: "+str(counter))
-        if i == 0 and prefix[i] == 47:
-            counter += 1
+        #if i == 0 and prefix[i] == 47:
+        #    counter += 1
         if prefix[i] == 47:
             counter += 1
-        elif prefix[i] + 47 in tracker :
-            #if tracker[prefix[i]+47] != 0:
-            #    print(tracker[prefix[i]+47])
-            #if tracker[prefix[i]+47] < 0:
-            #    print("THIS SHOULD NOT HAPPEN")
-        
+        if prefix[i] + 47 in tracker :
             counter += tracker[prefix[i]+47]#*tracker[prefix[i]]#tracker.pop(arr[i]+47)*tracker[arr[i]]
         if prefix[i] in tracker:
             tracker[prefix[i]] -= 1
