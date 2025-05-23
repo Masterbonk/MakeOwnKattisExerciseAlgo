@@ -18,7 +18,7 @@ def count_subsequences(prefix):
             counter += 1 ##This runs
         for j in range(i+1,len(prefix)):
             if (prefix[j] - prefix[i]) == 47:
-                print(str(i))
+                #print(str(i))
                 counter += 1
     return counter
 
