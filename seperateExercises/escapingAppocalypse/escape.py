@@ -28,17 +28,17 @@ def smallbfs(source, totalTimeSteps, road_list):
     reachable = set()
     queue = deque([(source, 0)])
     while queue:
-        u, t = queue.popleft()
-        if (u, t) in reachable: continue
-        reachable.add((u, t))
+        u, timestamp = queue.popleft()
+        if (u, timestamp) in reachable: continue
+        reachable.add((u, timestamp))
 
         for (startNode, endNode, _, time) in road_list:
-            if startNode == u and t + time <= totalTimeSteps:
-                if (endNode, t + time) not in reachable:
-                    queue.append((endNode, t + time))
+            if startNode == u and timestamp + time <= totalTimeSteps:
+                if (endNode, timestamp + time) not in reachable:
+                    queue.append((endNode, timestamp + time))
         
-        if t + 1 <= totalTimeSteps:
-            queue.append((u, t + 1))
+        if timestamp + 1 <= totalTimeSteps:
+            queue.append((u, timestamp + 1))
     return reachable
 
 def bfs(graph,src,dest,time,usedTime,mincap=0): 
