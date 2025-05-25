@@ -1,0 +1,37 @@
+from collections import defaultdict
+
+#Makes a prefix sum array of the given array
+def make_prefix_sum_arr(arr):
+    prefix = [0]*len(arr)
+    tracker = defaultdict(int)
+    for i in range(len(arr)):
+       
+        if i == 0:
+            tracker[(int(arr[i]))] += 1
+            prefix[i] = (int(arr[i]))
+        else:
+            tracker[int(arr[i]) + int(prefix[i-1])] += 1
+            prefix[i] = (int(arr[i]) + int(prefix[i-1])) 
+    return prefix, tracker
+
+#Counts the subsequences that sum to 47
+def count_subsequences(prefix, tracker):
+    counter = 0
+    for i in range(len(prefix)):
+        if prefix[i] == 47:
+            counter += 1
+        if prefix[i] + 47 in tracker :
+            counter += tracker[prefix[i]+47]
+        if prefix[i] in tracker:
+            tracker[prefix[i]] -= 1
+    return counter
+
+#----------------------------------------------------------------
+cases = int(input())
+
+for i in range(cases):
+    input()  #To deal with the line before each case
+    amount = int(input())
+    lst = input().strip().split()
+    prefix, tracker = make_prefix_sum_arr(lst)
+    print(count_subsequences(prefix, tracker))
