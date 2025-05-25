@@ -3,7 +3,6 @@ sys.setrecursionlimit(1000000000)
 n = int(input())
 distances = []
 
-#yes, ik my variable names suck, but please bear with me
 def buildTable(m):
     rows, cols = (1000, m)
     arr = [[0 for _ in range(cols)] for _ in range(rows)]#step,current
@@ -12,14 +11,14 @@ def buildTable(m):
     next.add((distances[m-1]))
     for x in range(m-2,0,-1):
         new = set()
-        for smth in next:
-            if arr[smth+distances[x]][x]==0 or arr[smth+distances[x]][x]>max(smth+distances[x],arr[smth][x+1]) :
-                arr[smth+distances[x]][x] = max(smth+distances[x], arr[smth][x+1])
-            new.add(smth+distances[x])
-            if smth-distances[x]>=0:
-                if  arr[smth-distances[x]][x]==0 or arr[smth-distances[x]][x]>arr[smth][x+1]:
-                    arr[smth-distances[x]][x] = arr[smth][x+1]
-                new.add(smth-distances[x])
+        for values in next:
+            if arr[values+distances[x]][x]==0 or arr[values+distances[x]][x]>max(values+distances[x],arr[values][x+1]) :
+                arr[values+distances[x]][x] = max(values+distances[x], arr[values][x+1])
+            new.add(values+distances[x])
+            if values-distances[x]>=0:
+                if  arr[values-distances[x]][x]==0 or arr[values-distances[x]][x]>arr[values][x+1]:
+                    arr[values-distances[x]][x] = arr[values][x+1]
+                new.add(values-distances[x])
         next = new
     return arr
 
@@ -40,30 +39,30 @@ for _ in range(n):
             break
         min = math.inf
         letsSee = set()
-        for smth in checkNext:
-            if arr[smth[0]+distances[x-1]][x] != 0:
-                if min>arr[smth[0]+distances[x-1]][x]:#can you always follow the min?
+        for values in checkNext:
+            if arr[values[0]+distances[x-1]][x] != 0:
+                if min>arr[values[0]+distances[x-1]][x]:#can you always follow the min?
                     letsSee.clear()
-                    min = arr[smth[0]+distances[x-1]][x]
-                    letsSee.add((smth[0]+distances[x-1],smth[1]+"U"))
-                elif min == arr[smth[0]+distances[x-1]][x]:
-                    letsSee.add((smth[0]+distances[x-1],smth[1]+"U"))
-            if smth[0]-distances[x-1]>=0:
-                if arr[smth[0]-distances[x-1]][x] !=0:
-                    if min>arr[smth[0]-distances[x-1]][x]:
+                    min = arr[values[0]+distances[x-1]][x]
+                    letsSee.add((values[0]+distances[x-1],values[1]+"U"))
+                elif min == arr[values[0]+distances[x-1]][x]:
+                    letsSee.add((values[0]+distances[x-1],values[1]+"U"))
+            if values[0]-distances[x-1]>=0:
+                if arr[values[0]-distances[x-1]][x] !=0:
+                    if min>arr[values[0]-distances[x-1]][x]:
                         letsSee.clear()
-                        min = arr[smth[0]-distances[x-1]][x]
-                        letsSee.add((smth[0]-distances[x-1],smth[1]+"D"))
-                    elif min == arr[smth[0]-distances[x-1]][x]:
-                        letsSee.add((smth[0]-distances[x-1],smth[1]+"D"))
+                        min = arr[values[0]-distances[x-1]][x]
+                        letsSee.add((values[0]-distances[x-1],values[1]+"D"))
+                    elif min == arr[values[0]-distances[x-1]][x]:
+                        letsSee.add((values[0]-distances[x-1],values[1]+"D"))
         if len(letsSee)==0:
             justStop = True
             break
         elif len(letsSee)==1:
             save = 0
-            for uh in letsSee:
-                answer += uh[1]
-                save = uh[0]
+            for x in letsSee:
+                answer += x[1]
+                save = x[0]
             letsSee.clear()#maybe move this into the for loop
             letsSee.add((save,""))
         else:
@@ -86,8 +85,8 @@ for _ in range(n):
     if justStop:
         print("IMPOSSIBLE")
     else:
-        for uhhh in checkNext:
-            if uhhh[0]==distances[m-1]:
+        for x in checkNext:
+            if x[0]==distances[m-1]:
                 found = True
                 answer += "D"
                 print(answer)
