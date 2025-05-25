@@ -66,7 +66,6 @@ def flow(graph, src, dest, totalTime, maxcapacity, numberOfPeople):
     while True: #Path is found in each loop
 
         ispath, p_or_seen = bfs(graph,src,dest,totalTime,0,mincap)
-        #ispath, p_or_seen = dfs(graph,src,dest,mincap, set(), totalTime,0)
         if not ispath:
             if mincap > 0:
                 mincap = mincap // 2 #Devides by 2 and rounds down, floordivision
@@ -117,7 +116,7 @@ def program():
                 maxcapacity = max(maxcapacity,people)
     
     '''
-    Used to use complex numbers to create edges that match the given timestep
+    Used to use tuples to create edges that match the given timestep
     '''
 
     sink = nodes+1 
@@ -129,7 +128,7 @@ def program():
                     graph[(h,d)] = dict()
             graph[(h,d)][(sink,-1)] = (101,0) #All hospitals have a path to the sink with unlimited space and no time cost.
 
-    #Make a pillar of sink nodes, each one points downward towards th future one, 
+    #Make a pillar of sink nodes, each one points downward towards the future one, 
     # with people 101 and time 0, that way we make a final node for all. source, 0 is considered the true source
     
     for d in range(totalTimeSteps+1):
