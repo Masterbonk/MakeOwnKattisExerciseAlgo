@@ -63,7 +63,7 @@ for _ in range(n):
             for x in letsSee:
                 answer += x[1]
                 save = x[0]
-            letsSee.clear()#maybe move this into the for loop
+            letsSee.clear()
             letsSee.add((save,""))
         else:
             same = True
