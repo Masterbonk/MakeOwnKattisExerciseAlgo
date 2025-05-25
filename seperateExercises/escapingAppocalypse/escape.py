@@ -1,10 +1,8 @@
 from collections import defaultdict
+from collections import deque
 import sys
-sys.setrecursionlimit(10**6)
 
-'''
-How to make it faster:
-'''
+sys.setrecursionlimit(10**6)
 
 amountOfTestcases = int(input())
 
@@ -26,36 +24,47 @@ amountOfTestcases = int(input())
                 return (True,p)
     return (False,seen)
 '''
-def bfs(graph,src,dest,time,usedTime,mincap=0): # returns path to dest or reachable set
+def smallbfs(source, totalTimeSteps, road_list):
+    reachable = set()
+    queue = deque([(source, 0)])
+    while queue:
+        u, t = queue.popleft()
+        if (u, t) in reachable: continue
+        reachable.add((u, t))
+
+        for (startNode, endNode, _, time) in road_list:
+            if startNode == u and t + time <= totalTimeSteps:
+                if (endNode, t + time) not in reachable:
+                    queue.append((endNode, t + time))
+        
+        if t + 1 <= totalTimeSteps:
+            queue.append((u, t + 1))
+    return reachable
+
+def bfs(graph,src,dest,time,usedTime,mincap=0): 
     parent = {src:src}
-    layer = [src]
-    while layer:
-        nextlayer = []
-        for UpperNode in layer:
-            for internalNode,cap in graph[UpperNode].items():
-                internalnode_time = internalNode[1]
-                destination = True
-                if internalnode_time != -1:
-                    if usedTime > internalnode_time:
-                        destination = False
-                if cap[0] > mincap and internalNode not in parent and destination and time >= usedTime:
-                    parent[internalNode] = UpperNode
-                    nextlayer.append(internalNode)
-                    if internalNode == dest:
-                        p =  []
-                        current_vertex = dest
-                        while src != current_vertex:
-                            p.append((parent[current_vertex],current_vertex))
-                            current_vertex = parent[current_vertex]
-                        return (True,p)
-        layer = nextlayer
+    queue = deque([src])
+    while queue:
+        UpperNode = queue.popleft()
+        for internalNode,cap in graph[UpperNode].items():
+            if cap[0] > mincap and internalNode not in parent and time >= usedTime: 
+                parent[internalNode] = UpperNode
+                queue.append(internalNode)
+                if internalNode == dest:
+                    p =  []
+                    current_vertex = dest
+                    while src != current_vertex:
+                        p.append((parent[current_vertex],current_vertex))
+                        current_vertex = parent[current_vertex]
+                    return (True,p)
     return (False,set(parent))
    
 
-def flow(graph, src, dest, totalTime, maxcapacity):
+def flow(graph, src, dest, totalTime, maxcapacity, numberOfPeople):
     current_flow = 0
-    mincap = maxcapacity # set to 0 to disable capacity scaling
+    mincap = maxcapacity
     while True: #Path is found in each loop
+
         ispath, p_or_seen = bfs(graph,src,dest,totalTime,0,mincap)
         #ispath, p_or_seen = dfs(graph,src,dest,mincap, set(), totalTime,0)
         if not ispath:
@@ -63,15 +72,14 @@ def flow(graph, src, dest, totalTime, maxcapacity):
                 mincap = mincap // 2 #Devides by 2 and rounds down, floordivision
                 continue
             else:
-
-                return (current_flow,
-                        { a:{b:c[0]-graph[a][b][0] for b,c in d.items() if graph[a][b]<c} 
-                            for a,d in graph.items() },
-                        p_or_seen)
+                return (current_flow, None, None)
         
-        #print("path:", *reversed(p_or_seen))
-        saturation = min( graph[u][v] for u,v in p_or_seen )
+        saturation = min(graph[u][v] for u,v in p_or_seen )
         current_flow += saturation[0]
+
+        if current_flow >= numberOfPeople:
+            return (numberOfPeople, None, None)
+        
         for u,v in p_or_seen:
             graph[u][v] = (graph[u][v][0]-saturation[0],graph[u][v][1])
             graph[v][u] = (graph[u][v][0]+saturation[0],graph[u][v][1])
@@ -86,49 +94,59 @@ def program():
     
     numberOfRoads = int(input())
     
-    graph = defaultdict(lambda: defaultdict(int))
+    graph = dict()
 
     maxcapacity = 0
+
+    road_list = [(0,0,0,0)]*numberOfRoads
     for i in range(numberOfRoads):
         startNode, endNode, people, time = map(int, input().split())
+        road_list[i] = (startNode, endNode, people, time)
+
+    reachable = smallbfs(source,totalTimeSteps,road_list)
+    
+    for i in range(numberOfRoads):
+        startNode, endNode, people, time = road_list[i]
         for d in range(totalTimeSteps+1):
-            if d + time <= totalTimeSteps:
+            if d + time <= totalTimeSteps and (startNode, d) in reachable and (endNode, d + time) in reachable:
+                if (startNode, d) not in graph:
+                    graph[(startNode, d)] = dict()
+                if (endNode,(d + time)) not in graph:
+                    graph[(endNode,(d + time))] = dict()
                 graph[(startNode,d)][(endNode,(d + time))] = (people,time)
                 maxcapacity = max(maxcapacity,people)
-
     
     '''
-    Use complex numbers to create edges that match the given timestep
+    Used to use complex numbers to create edges that match the given timestep
     '''
 
-    sink = nodes+1 #Works now
-    source = source #Correct
-    
+    sink = nodes+1 
+    graph[(sink,-1)] = dict()
+
     for h in hospitals:
         for d in range(totalTimeSteps+1):
+            if (h,d) not in graph:
+                    graph[(h,d)] = dict()
             graph[(h,d)][(sink,-1)] = (101,0) #All hospitals have a path to the sink with unlimited space and no time cost.
 
-
     #Make a pillar of sink nodes, each one points downward towards th future one, 
-    # with people 101 and time 0, that way we make a final node for all
-
+    # with people 101 and time 0, that way we make a final node for all. source, 0 is considered the true source
+    
     for d in range(totalTimeSteps+1):
+        if (source,d) not in graph:
+            graph[(source,d)] = dict()
+        if (source,(d+1)) not in graph:
+            graph[(source,(d+1))] = dict()
         graph[(source,d)][(source,(d+1))] = (101,0)
+    
+    flow_value, _, _ = flow(graph, (source,0), (sink,-1),totalTimeSteps, maxcapacity, numberOfPeople)
 
-    #print({k: {kk: str(vv) for kk, vv in v.items()} for k, v in graph.items()})
-
-    flow_value, residual_graph, extra = flow(graph, (source,0), (sink,-1),totalTimeSteps, maxcapacity)
-
-    #print(flow_value)
+    #Actual print
     
     if flow_value > numberOfPeople:
         print(numberOfPeople)
     else:
-        print(flow_value)
-        
-    
-    #Actual ##print
-    
+        print(flow_value)    
 
 for t in range(amountOfTestcases):
     program()

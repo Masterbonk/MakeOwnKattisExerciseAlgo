@@ -18,16 +18,16 @@ def generate_input(
         input_lines.append(str(n))
 
         start_location = random.randint(1, n)
-        people = random.randint(1, max_people)
-        steps = random.randint(1, max_time_steps)
+        people = max_people
+        steps = max_time_steps
         input_lines.append(f"{start_location} {people} {steps}")
 
-        m = random.randint(1, min(max_hospitals, n))
+        m = min(max_hospitals, n)
         hospital_locations = random.sample(range(1, n+1), m)
         input_lines.append(str(m))
         input_lines.extend(str(h) for h in hospital_locations)
 
-        r = random.randint(1, max_roads)
+        r = max_roads
         input_lines.append(str(r))
 
         existing_roads = set()
