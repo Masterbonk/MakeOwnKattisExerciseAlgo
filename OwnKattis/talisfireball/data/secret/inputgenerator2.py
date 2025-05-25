@@ -1,7 +1,7 @@
 import random
 
 people = int(100000)
-coordinate = int(450)
+coordinate = int(50000)
 
 
 allies = set()
@@ -86,8 +86,8 @@ def generateCoordinates(coordinate):
             next = False
 
 
-for x in range(0,2):
-    nameOfFile = f"WithAllyMedium{x+1}" 
+for x in range(0,10):
+    nameOfFile = f"OverALargeArea{x+1}" 
     f = open(nameOfFile+".in", "w")
     """f = open(f"MaxAllies{x+1}.in", "w")"""
     n = random.randint(1,people)
